@@ -57,13 +57,16 @@ const userSchema = new mongoose.Schema(
         type: Number,
         default: 0,
       },
+      ratingHistory: [
+        {
+          date: {
+            type: Date,
+            default: Date.now,
+          },
+          rating: Number,
+        },
+      ],
     },
-    // matchHistory: [
-    //     {
-    //         type: mongoose.Schema.Types.ObjectId,
-    //         ref: "Match",
-    //     },
-    // ]
   },
   { timestamps: true }
 );

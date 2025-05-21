@@ -175,6 +175,18 @@ function calculateResult(expression) {
   }
 }
 
+function calculateRatingChange(winnerRating, loserRating) {
+  const K = 32;
+  const expectedWin =
+    1 / (1 + Math.pow(10, (loserRating - winnerRating) / 400));
+  const expectedLoss = 1 - expectedWin;
+
+  const winChange = Math.round(K * (1 - expectedWin));
+  const lossChange = -Math.round(K * expectedLoss); // keep negative
+
+  return { winChange, lossChange };
+}
+
 function handleSubmitAnswer(socket) {
   return async ({ matchId, expression, userId, opponentId }) => {
     try {
@@ -228,7 +240,10 @@ function handleSubmitAnswer(socket) {
       }
 
       // Update players
-      const { winner, loser } = await updatePlayerStats(userId, match);
+      const { winner, loser, ratingChanges } = await updatePlayerStats(
+        userId,
+        match
+      );
 
       // Notify players
       io.to(roomId).emit("matchCompleted", {
@@ -255,7 +270,7 @@ function handleSubmitAnswer(socket) {
       socket.emit("answerSuccess", {
         matchId,
         isWinner: true,
-        ratingChange: RATING_CHANGE_WIN,
+        ratingChange: ratingChanges.winner,
         newRating: winner.rating,
       });
 
@@ -278,7 +293,7 @@ function handleSubmitAnswer(socket) {
           opponentSocket?.emit("answerSuccess", {
             matchId,
             isWinner: false,
-            ratingChange: RATING_CHANGE_LOSS,
+            ratingChange: ratingChanges.loser,
             newRating: loser.rating,
           });
         }
@@ -296,13 +311,25 @@ function handleSubmitAnswer(socket) {
 }
 
 async function updatePlayerStats(winnerId, match) {
-  // Update winner
+  const loserId =
+    winnerId === String(match.player1) ? match.player2 : match.player1;
+
+  const winnerDoc = await User.findById(winnerId);
+  const loserDoc = await User.findById(loserId);
+
+  if (!winnerDoc || !loserDoc) throw new Error("One of the players not found");
+
+  const { winChange, lossChange } = calculateRatingChange(
+    winnerDoc.rating,
+    loserDoc.rating
+  );
+
   const updatedWinner = await User.findByIdAndUpdate(
     winnerId,
     [
       {
         $set: {
-          rating: { $add: ["$rating", RATING_CHANGE_WIN] },
+          rating: { $add: ["$rating", winChange] },
           "stats.wins": { $add: ["$stats.wins", 1] },
           "stats.gamesPlayed": { $add: ["$stats.gamesPlayed", 1] },
           currentStreak: { $add: ["$currentStreak", 1] },
@@ -311,7 +338,7 @@ async function updatePlayerStats(winnerId, match) {
             weekday: "long",
           }),
           highestRating: {
-            $max: ["$highestRating", { $add: ["$rating", RATING_CHANGE_WIN] }],
+            $max: ["$highestRating", { $add: ["$rating", winChange] }],
           },
         },
       },
@@ -319,35 +346,48 @@ async function updatePlayerStats(winnerId, match) {
     { new: true }
   );
 
-  if (!updatedWinner) throw new Error("Winner not found");
-
-  // Update loser
-  const loserId =
-    winnerId === String(match.player1) ? match.player2 : match.player1;
-  let updatedLoser = null;
-
-  if (loserId) {
-    updatedLoser = await User.findByIdAndUpdate(
-      loserId,
-      {
-        $inc: {
-          "stats.losses": 1,
-          rating: RATING_CHANGE_LOSS,
-          "stats.gamesPlayed": 1,
-        },
-        $set: {
-          lastgameDate: new Date(),
-          lastGameDay: new Date().toLocaleDateString("en-US", {
-            weekday: "long",
-          }),
-          currentStreak: 0,
-        },
+  await User.findByIdAndUpdate(winnerId, {
+    $push: {
+      "stats.ratingHistory": {
+        date: new Date(),
+        rating: updatedWinner.rating,
       },
-      { new: true }
-    );
-  }
+    },
+  });
 
-  return { winner: updatedWinner, loser: updatedLoser };
+  const updatedLoser = await User.findByIdAndUpdate(
+    loserId,
+    {
+      $inc: {
+        "stats.losses": 1,
+        rating: lossChange,
+        "stats.gamesPlayed": 1,
+      },
+      $set: {
+        lastgameDate: new Date(),
+        lastGameDay: new Date().toLocaleDateString("en-US", {
+          weekday: "long",
+        }),
+        currentStreak: 0,
+      },
+    },
+    { new: true }
+  );
+
+  await User.findByIdAndUpdate(loserId, {
+    $push: {
+      "stats.ratingHistory": {
+        date: new Date(),
+        rating: updatedLoser.rating,
+      },
+    },
+  });
+
+  return {
+    winner: updatedWinner,
+    loser: updatedLoser,
+    ratingChanges: { winner: winChange, loser: lossChange },
+  };
 }
 
 function handleDisconnect(socket) {

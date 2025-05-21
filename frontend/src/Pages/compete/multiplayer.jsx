@@ -360,8 +360,7 @@ const Multiplayer = () => {
         state: {
           matchId,
           problem,
-          userAttempts: user.attempts,
-          opponentAttempts: opponent.attempts,
+          playerId: user.id,
           result:
             activeModal === "success"
               ? "win"

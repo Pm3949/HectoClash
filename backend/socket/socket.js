@@ -155,7 +155,7 @@ function startMatch(roomId, player1, player2, problem, matchId) {
       matchTimeoutMap.delete(matchId);
       console.log(`⏱️ Match ${matchId} ended in draw due to timeout`);
     }
-  }, 60000);
+  }, 5*60000);
 
   matchTimeoutMap.set(String(matchId), timeoutId);
 }

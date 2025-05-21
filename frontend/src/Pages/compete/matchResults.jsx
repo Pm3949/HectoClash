@@ -11,7 +11,8 @@
     const [match, setMatch] = useState(null);
     const [result, setResult] = useState(null);
 
-  const currentUser = useSelector((state) => state.user.user);
+const playerId = location.state?.playerId;
+
     useEffect(() => {
       const fetchMatchData = async () => {
         try {
@@ -31,7 +32,7 @@
             if (apiData.winner === null) {
               resultStatus = 'draw';
             } else {
-            resultStatus = apiData.winner._id === currentUser?._id ? 'win' : 'loss';
+            resultStatus = apiData.winner?._id === playerId ? 'win' : 'loss';
             }
             
             setResult(resultStatus);
@@ -45,13 +46,13 @@
       };
 
       fetchMatchData();
-    }, [location.state, currentUser?._id]);
+    }, [location.state, playerId]);
 
     // console.log("Match",match);
     const calculateStats = () => {
       if (!match) return null;
 
-      const isPlayer1 = match.player1._id === currentUser?._id;
+      const isPlayer1 = match.player1._id === playerId;
       const user = isPlayer1 ? match.player1 : match.player2;
       const opponent = isPlayer1 ? match.player2 : match.player1;
 
@@ -111,7 +112,7 @@
         </div>
       );
     }
-
+    
     const stats = calculateStats();
 
     return (

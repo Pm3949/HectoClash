@@ -36,7 +36,7 @@ const LiveMatches = () => {
     fetchLiveMatches();
 
     // Optional: Set up polling to refresh matches periodically
-    const intervalId = setInterval(fetchLiveMatches, 30000); // Refresh every 30 seconds
+    const intervalId = setInterval(fetchLiveMatches, 5000); // Refresh every 30 seconds
 
     return () => clearInterval(intervalId); // Clean up on unmount
   }, []);

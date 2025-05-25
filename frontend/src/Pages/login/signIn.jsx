@@ -36,7 +36,7 @@ const SignIn = ({ onClose, onSwitchToSignUp, onLoginSuccess }) => {
 
     try {
       const res = await axios.post(
-        `http://localhost:8080/api/users/login`,
+        `https://hectoclash-backend.onrender.com/api/users/login`,
         user,
         {
           headers: { "Content-Type": "application/json" },

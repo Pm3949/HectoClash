@@ -20,7 +20,7 @@
           const matchId = location.state?.matchId || window.location.pathname.split('/').pop();
           
           if (matchId) {
-            const response = await axios.get(`http://localhost:8080/api/match/${matchId}`);
+            const response = await axios.get(`https://hectoclash-backend.onrender.com/api/match/${matchId}`);
             const apiData = response.data.match; // Access the match object from response
             // console.log(apiData);
             

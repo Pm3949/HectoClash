@@ -23,7 +23,7 @@ const Profile = () => {
 
   const handleLogout = async () => {
     try {
-      const res = await axios.get(`http://localhost:8080/api/users/logout`);
+      const res = await axios.get(`https://hectoclash-backend.onrender.com/api/users/logout`);
       toast.success(res.data.message);
       dispatch(removeAuthUser());
       navigate("/");

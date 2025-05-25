@@ -21,7 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 const corsOptions = {
-  origin: 'http://localhost:3000', // Frontend URL
+  origin: 'https://hectoclash-cuwf.onrender.com', // Frontend URL
   credentials: true,
 };
 app.use(cors(corsOptions));

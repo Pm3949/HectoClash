@@ -18,7 +18,7 @@ const matchTimeoutMap = new Map(); // key = matchId, value = timeoutId
 function initSocket(server) {
   io = new Server(server, {
     cors: {
-      origin: ["http://localhost:3000"],
+      origin: ["https://hectoclash-frontend.onrender.com"],
       methods: ["GET", "POST"],
       credentials: true,
     },

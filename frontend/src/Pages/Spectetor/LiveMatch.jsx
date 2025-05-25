@@ -16,7 +16,7 @@ const LiveMatches = () => {
 
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/match/getAllMatches`
+        `https://hectoclash-backend.onrender.com/api/match/getAllMatches`
       );
       // Ensure we're working with an array
       const matchesData = Array.isArray(response.data)

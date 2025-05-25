@@ -8,7 +8,7 @@ export const SocketProvider = ({ children }) => {
   const socketRef = useRef(null);
 
   useEffect(() => {
-    socketRef.current = io("http://localhost:8080"); // Replace with your backend URL
+    socketRef.current = io("https://hectoclash-backend.onrender.com"); // Replace with your backend URL
 
     return () => {
       socketRef.current.disconnect();

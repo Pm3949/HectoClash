@@ -10,7 +10,7 @@ const LeaderboardPage = () => {
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
-        const res = await axios.get("http://localhost:8080/api/users/leaderboard");
+        const res = await axios.get("https://hectoclash-backend.onrender.com/api/users/leaderboard");
         setLeaderboard(res.data.leaderboard);
       } catch (error) {
         console.error("Error fetching leaderboard:", error);

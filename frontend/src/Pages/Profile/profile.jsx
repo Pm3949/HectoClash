@@ -23,7 +23,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get("https://hectoclash-backend.onrender.com/api/users/me", {
+        const res = await axios.get(`https://hectoclash-backend.onrender.com/api/users/me`, {
           withCredentials: true,
         });
         setUser(res.data.user);

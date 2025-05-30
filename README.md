@@ -1,3 +1,5 @@
+
+
 # 🔢 HectoClash
 
 **HectoClash** is a real-time multiplayer mental math game based on the Hectoc format developed by Yusnier Viera. Players race against each other to insert mathematical operations into a fixed 6-digit sequence to form an expression that equals **100**. The game combines speed, logic, and arithmetic skills in an interactive and competitive environment.
@@ -23,7 +25,7 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/hectoclash.git
+git clone https://github.com/Pm3949/hectoclash.git
 cd hectoclash
 
 # Install server dependencies
@@ -38,4 +40,14 @@ npm install
 npm run dev
 ```
 
+---
 
+## 👨‍💻 Developed By
+
+**Manav Patel** and **Monil Chandgadhiya**
+
+🔗 [GitHub(Pm3949)](https://github.com/Pm3949)
+🔗 [GitHub(monil7828)](https://github.com/Monil7828)
+• 📧 [manavpatel0767@gmail.com](mailto:manavpatel0767@gmail.com)
+
+\

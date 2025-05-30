@@ -28,16 +28,16 @@
 git clone https://github.com/Pm3949/hectoclash.git
 cd hectoclash
 
-# Install server dependencies
-cd server
+# Install frontend dependencies
+cd frontend
 npm install
 
-# Install client dependencies
-cd ../client
+# Install backend dependencies
+cd ../backend
 npm install
 
-# Run both servers (use concurrently or separate terminals)
-npm run dev
+# Run both frontend and backend (use concurrently or separate terminals)
+npm run start
 ```
 
 ---

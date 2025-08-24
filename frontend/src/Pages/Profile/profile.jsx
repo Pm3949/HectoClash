@@ -1,6 +1,3 @@
-[media pointer="file-service://file-S41JiSz1HSJNDGrdRU4bgM"]
-int his graph i want all dtes in the x-aix with only yer month and day and vertically here is code for profile
-
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Nav from "../../components/Nav";
@@ -34,7 +31,7 @@ const CustomTooltip = ({ active, payload, label }) => {
 };
 
 const Profile = () => {
-  const dispatch = useDispatch(); 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
 
@@ -54,18 +51,18 @@ const Profile = () => {
     fetchUser();
   }, []);
 
- const handleLogout = async () => {
-  try {
-    const res = await axios.get(`https://hectoclash-backend.onrender.com/api/users/logout`, {
-      withCredentials: true, // Ensure cookies/session are sent
-    });
-    toast.success(res.data.message);
-    dispatch(removeAuthUser()); // ✅ Clear Redux auth state
-    navigate("/"); // ✅ Redirect to home
-  } catch (error) {
-    toast.error(error.response?.data?.message || "Logout failed");
-  }
-};
+  const handleLogout = async () => {
+    try {
+      const res = await axios.get(`https://hectoclash-backend.onrender.com/api/users/logout`, {
+        withCredentials: true, // Ensure cookies/session are sent
+      });
+      toast.success(res.data.message);
+      dispatch(removeAuthUser()); // ✅ Clear Redux auth state
+      navigate("/"); // ✅ Redirect to home
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Logout failed");
+    }
+  };
 
 
   if (!user) {
@@ -181,21 +178,21 @@ const Profile = () => {
                         <ResponsiveContainer width="100%" height="100%">
                           <LineChart data={ratingHistory}>
                             <CartesianGrid strokeDasharray="3 3" stroke="#444" />
-<XAxis
-  dataKey="date"
-  stroke="#aaa"
-  tickFormatter={(str) => {
-  const date = new Date(str);
-  return `${(date.getMonth() + 1).toString().padStart(2, "0")}-${date
-    .getDate()
-    .toString()
-    .padStart(2, "0")}`;
-}}
-  tick={{ fontSize: 12 }}
-  angle={-45}
-  textAnchor="end"
-  height={60}
-/>
+                            <XAxis
+                              dataKey="date"
+                              stroke="#aaa"
+                              tickFormatter={(str) => {
+                                const date = new Date(str);
+                                return `${(date.getMonth() + 1).toString().padStart(2, "0")}-${date
+                                  .getDate()
+                                  .toString()
+                                  .padStart(2, "0")}`;
+                              }}
+                              tick={{ fontSize: 12 }}
+                              angle={-45}
+                              textAnchor="end"
+                              height={60}
+                            />
 
 
                             <YAxis stroke="#aaa" />

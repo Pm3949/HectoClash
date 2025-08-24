@@ -36,25 +36,27 @@ const Profile = () => {
   const [user, setUser] = useState(null);
 
   // ✅ get token from Redux
-  const token = useSelector((state) => state.user?.authUser?.token);
-
+  const userId = useSelector((state) => state.user?.authUser?._id);
+    
   useEffect(() => {
+    if (!userId) {
+      navigate("/login"); // 🚀 redirect if no id
+      return;
+    }
+
     const fetchUser = async () => {
       try {
         const res = await axios.get(
-          `https://hectoclash-backend.onrender.com/api/users/me`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`, // ✅ send token in header
-            },
-          }
+          `https://hectoclash-backend.onrender.com/api/users/me/${userId}` // ✅ send id
         );
         setUser(res.data.user);
       } catch (error) {
         console.error("Failed to fetch user", error);
         toast.error("Failed to fetch user data");
+        navigate("/login");
       }
     };
+
 
     if (token) {
       fetchUser();
